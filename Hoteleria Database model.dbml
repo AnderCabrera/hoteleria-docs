@@ -1,11 +1,11 @@
-
-  -------------------------
-   Notes
-  -------------------------
-   Each model must have 
-   the versionKey = false.
-  -------------------------
-
+/*
+  |-------------------------
+  | Notes:
+  |-------------------------
+  | Each model must have 
+  | the versionKey = false.
+  |-------------------------
+*/
 
 Table User {
   id int [pk]
