@@ -1,0 +1,135 @@
+
+  -------------------------
+   Notes
+  -------------------------
+   Each model must have 
+   the versionKey = false.
+  -------------------------
+
+
+Table User {
+  id int [pk]
+  email varchar [not null]
+   Password must be more than 8 characteres
+  password varchar [not null]
+  name varchar [not null]
+  last_name varchar [not null]
+  created_at timestamp [not null]
+  updated_at timestamp
+  role role [not null, note 'CLIENT, ADMIN_HOTEL, ADMIN_PLATFORM']
+  tp_status status [not null, note 'ACTIVE, DELETED, BANNED']
+  
+  indexes {
+    email [unique]
+  }
+}
+
+Table Hotel {
+  id int [pk]
+  name varchar [not null]
+  country varchar [not null]
+  address varchar [not null]
+  description varchar [not null]
+  created_at timestamp [not null]
+  updated_at timestamp 
+}
+
+Table FavoriteHotels {
+  id int [pk]
+  user_id int [ref  User.id, not null]
+  hotel_id int [ref  Hotel.id, not null]
+
+  indexes {
+    hotel_id
+  }
+}
+
+Table TypeRoom {
+  id int [pk]
+  type varchar [not null]
+
+  Note 'Suite, Individual or Double'
+}
+
+Table Room  {
+  id int [pk]
+  description varchar [not null]
+  people_capacity int [not null]
+  night_price double
+  room_type varchar [ref  TypeRoom.type, not null]
+  created_at timestamp [not null]
+  updated_at timestamp 
+  tp_status status [note 'ACTIVE, DELETED, HIDDEN', not null]
+  id_hotel int [not null, ref  Hotel.id]
+}
+
+Table HotelImages {
+  id int [pk]
+  image_url varchar [not null]
+  hotel_id int [ref  Hotel.id, not null]
+
+  indexes {
+    hotel_id
+  }
+}
+
+Table RoomImages {
+  id int [pk]
+  image_url varchar [not null]
+  room_id int [ref  Room.id, not null]
+  
+  indexes {
+    room_id
+  }
+}
+
+Table Reviews {
+  id int [pk]
+  rating int [not null, note 'Number of stars must be between 0-5']
+  comment varchar [not null]
+  is_customer bool [not null, note 'Checks if the user was a customer.'] 
+  user_id int [ref  User.id, not null]
+  hotel_id int [ref  Hotel.id, not null]
+
+  indexes {
+    hotel_id
+  }
+}
+
+Table Booking {
+  id int [pk]
+  date_start date [not null]
+  date_end date [not null]
+  created_at timestamp [not null]
+  updated_at timestamp 
+  room_id int [ref  Room.id, not null]
+  user_id int [ref  User.id, not null]
+}
+
+Table Services {
+  id int [pk]
+  name varchar [not null]
+  description varchar [not null]
+  tp_status status [not null, note 'AVILIABLE, DELETED, HIDDEN']
+  price double [not null]
+  hotel_id int [ref  Hotel.id]
+  
+}
+
+Table ServicesAdquired {
+  id int [pk]
+  service_id int [ref  Services.id]
+  date_adquired timestamp [not null]
+  date_start timestamp [not null]
+  date_end timestamp [not null]
+  total_price double [not null] 
+}
+
+Table Invoice {
+  id int [not null]
+  id_transaction int [ref  ServicesAdquired.id]
+  created_at timestamp [not null]
+  price double [not null]
+  booking_id int [ref - Booking.id]
+  user_id int [ref - User.id]
+}
